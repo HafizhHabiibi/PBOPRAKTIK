@@ -5,33 +5,32 @@ class AppOrder:
     def __init__(self, root):
         self.root = root
         self.root.title("Aplikasi Pemesanan Makanan")
-        self.root.geometry("700x700")
-        # self.root.configure(bg="pink")
+        self.root.geometry("1000x700")
+        self.root.configure(bg="pink")
 
         self.widget_create()
 
     def widget_create(self):
         # Title label
-        title_label = tk.Label(text="Aplikasi Pemesanan Makanan", font=("Times New Roman", 20, "bold"))
+        title_label = tk.Label(text="Aplikasi Pemesanan Makanan", font=("Times New Roman", 20, "bold"), bg="pink", fg="white")
         title_label.pack(pady=10)
 
         # Nama Pemesan
-        name_label = tk.Label(text="Nama Pemesan : ")
+        name_label = tk.Label(text="Nama Pemesan : ", bg="pink")
         name_label.pack()
         self.name_entry = tk.Entry(self.root, width=35)
         self.name_entry.pack(pady=5)
 
         # Pilihan Makanan
-        food_label = tk.Label(text="Pilih Makanan : ")
+        self.food_list = {"Nasi Goreng":10000, "Bakso":12000, "Mie Ayam":15000, "Soto":10000}
+        food_label = tk.Label(text="Pilih Makanan : ", bg="pink")
         food_label.pack()
-        food_option = ["Nasi Goreng", "Bakso", "Mie Ayam", "Sate", "Soto"]
+        food_list = list(self.food_list.keys())
 
         self.food_var = tk.StringVar(value="")
-        self.food_menu = ttk.Combobox(self.root, values=food_option, width=25, textvariable=self.food_var, state="readonly")
+        self.food_menu = ttk.Combobox(self.root, values=food_list, width=25, textvariable=self.food_var, state="readonly")
         self.food_menu.pack(pady=5)
-
-        # Jumlah Pesanan
-        qty_label = tk.Label(text="Jumlah Pesanan : ")
+        qty_label = tk.Label(text="Jumlah Pesanan : ", bg="pink")
         qty_label.pack()
         self.qty_entry = tk.Entry(self.root, width=25)
         self.qty_entry.pack(pady=5)
@@ -41,16 +40,18 @@ class AppOrder:
         add_button.pack(pady=10)
 
         # Daftar Pesanan
-        order_label = tk.Label(text="Daftar Pesanan : ")
+        order_label = tk.Label(text="Daftar Pesanan : ", bg="pink")
         order_label.pack()
-        self.order_table = ttk.Treeview(self.root, columns=("Nama", "Makanan", "Jumlah"), show="headings")
+        self.order_table = ttk.Treeview(self.root, columns=("Nama", "Makanan", "Jumlah", "Harga"), show="headings")
         self.order_table.heading("Nama", text="Nama")
         self.order_table.heading("Makanan", text="Makanan")
         self.order_table.heading("Jumlah", text="Jumlah")
+        self.order_table.heading("Harga", text="Harga")
 
         self.order_table.column("Nama", width=200, anchor="center")
         self.order_table.column("Makanan", width=200, anchor="center")
         self.order_table.column("Jumlah", width=200, anchor="center")
+        self.order_table.column("Harga", width=200, anchor="center")
         self.order_table.pack(pady=10)
 
         # Clear Table
@@ -61,9 +62,10 @@ class AppOrder:
         name = self.name_entry.get()
         food = self.food_var.get()
         qty = self.qty_entry.get()
-
+        
         if name and qty.isdigit():
-            self.order_table.insert("", "end", values=(name, food, qty))
+            price = self.food_list[food] * int(qty)
+            self.order_table.insert("", "end", values=(name, food, qty, price))
         else:
             messagebox.showerror("Error", "Pastikan Inputan Tidak Kosong !")
 
