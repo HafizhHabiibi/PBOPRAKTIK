@@ -58,6 +58,7 @@ class AppOrder:
         clear_button = tk.Button(self.root, text="Reset", width=20, command=self.clear_data)
         clear_button.pack(pady=10)
     
+# Fungsi tambah data
     def add_data(self):
         name = self.name_entry.get()
         food = self.food_var.get()
@@ -65,16 +66,16 @@ class AppOrder:
         
         if name and qty.isdigit():
             price = self.food_list[food] * int(qty)
-            self.order_table.insert("", "end", values=(name, food, qty, price))
+            self.order_table.insert("", "end", values=(name, food, qty, f"Rp.{price:,}"))
         else:
             messagebox.showerror("Error", "Pastikan Inputan Tidak Kosong !")
 
+# Fungsi mereset data
     def clear_data(self):
         confirm = messagebox.askquestion("", "Apakah Anda Yakin Mereset Tabel ?")
         if confirm == "YES".lower():
             for item in self.order_table.get_children():
                 self.order_table.delete(item)
-
 
 if __name__ == "__main__":
     root = tk.Tk()
